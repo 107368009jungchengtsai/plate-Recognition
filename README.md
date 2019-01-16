@@ -106,17 +106,21 @@
 
     XMLtoTXT(xml_Dir)
 
-## use yolo-v2
-First, use python transforming your xml file into txt files which are used in yolo-v2, and dividing file into train and validation. 
-Second, in your file folder use 'git clone https://github.com/pjreddie/darknet' to download file from github, and use 'wget https://pjreddie.com/media/files/yolo.weights' to download weight .
-Third, modify the file for your custom train
-Forth, run make to make darknet executed file, in terminal execute './darknet detector train <txt file define> <yolo-v2 network> <weight file>',example './darknet detector train cfg/voc.data cfg/yolov2-voc-custom.cfg darknet53.conv.74'
+## use yolo-v2 model
+![image](https://github.com/107368009jungchengtsai/plate-Recognition/blob/master/yolov2_train.png)
 
-Finally, after training run './darknet detector test cfg/voc.data cfg/yolov2-voc-custom.cfg backup/yolov2-final.weights <image path>'.
+## summary
+![image](https://github.com/107368009jungchengtsai/plate-Recognition/blob/master/summary.png)
 
-And you will see like below.
+## test image
+![image](https://github.com/107368009jungchengtsai/plate-Recognition/blob/master/yolo_test.png)
 
-image yolo_test.png
+## test image output
+![image](https://github.com/107368009jungchengtsai/plate-Recognition/blob/master/yolo_out.png)
+
+## 存車牌定位圖檔
+![image](https://github.com/107368009jungchengtsai/plate-Recognition/blob/master/plate.png)
+
 # 車牌切割
 ## 流程圖
 ![image](https://github.com/107368009jungchengtsai/The-Simpsons-Characters-Recognition-Challenge/blob/master/%E6%B5%81%E7%A8%8B%E5%9C%96.jpg)
