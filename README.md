@@ -2,9 +2,9 @@
 作法說明
 # 車牌定位
 ## 流程圖
-![image](https://github.com/107368009jungchengtsai/The-Simpsons-Characters-Recognition-Challenge/blob/master/%E6%B5%81%E7%A8%8B%E5%9C%96.jpg)
+![image](https://github.com/107368009jungchengtsai/plate-Recognition/blob/master/forehead.png)
 
-## 寫出image file 的路徑供yolo-v2使用
+## 1.寫出image file 的路徑供yolo-v2使用
     import xml.etree.ElementTree as ET
     import pickle
     import os
@@ -33,7 +33,7 @@
             out_file.write('%s/%s\n'%(root,str(i)+'.jpg'))
             i=i+1
     out_file.close()
-## xml轉成txt檔
+## 2.xml轉成txt檔
     import xml.etree.ElementTree as ET
     import pickle
     import os
@@ -106,19 +106,19 @@
 
     XMLtoTXT(xml_Dir)
 
-## use yolo-v2 model
+## 3.use yolo-v2 model
 ![image](https://github.com/107368009jungchengtsai/plate-Recognition/blob/master/yolov2_train.png)
 
-## summary
+## 4.summary
 ![image](https://github.com/107368009jungchengtsai/plate-Recognition/blob/master/summary.png)
 
-## test image
+## 5.test image
 ![image](https://github.com/107368009jungchengtsai/plate-Recognition/blob/master/yolo_test.png)
 
-## test image output
+## 6.test image output
 ![image](https://github.com/107368009jungchengtsai/plate-Recognition/blob/master/yolo_out.png)
 
-## 存車牌定位圖檔
+## 7.存車牌定位圖檔
 ![image](https://github.com/107368009jungchengtsai/plate-Recognition/blob/master/plate.png)
 
 # 車牌切割
