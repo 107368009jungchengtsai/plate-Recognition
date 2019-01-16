@@ -4,51 +4,64 @@
 ## 流程圖
 ![image](https://github.com/107368009jungchengtsai/The-Simpsons-Characters-Recognition-Challenge/blob/master/%E6%B5%81%E7%A8%8B%E5%9C%96.jpg)
 
-＃寫出image file 的路徑供yolo-v2使用
-import xml.etree.ElementTree as ET
-import pickle
-import os
-from os import listdir, getcwd
-from os.path import join
- 
-TrainDir = 'data/train_preprocess'
- 
-out_file = open('data/train_image_path.txt','w')
-for root,dirs,files in os.walk(TrainDir):
+## 寫出image file 的路徑供yolo-v2使用
+    import xml.etree.ElementTree as ET
+    import pickle
+    import os
+    from os import listdir, getcwd
+    from os.path import join
+    TrainDir = 'data/train_preprocess'
+    out_file = open('data/train_image_path.txt','w')
+    for root,dirs,files in os.walk(TrainDir):
     for file in files:
         if '.jpg'==file[-4:]:
             out_file.write('%s/%s\n'%(root,file))
-out_file.close()
-
-ValDir = 'data/val_preprocess'
- 
-out_file = open('data/val_image_path.txt','w')
-for root,dirs,files in os.walk(ValDir):
+            out_file.close()
+    ValDir = 'data/val_preprocess'
+    out_file = open('data/val_image_path.txt','w')
+    for root,dirs,files in os.walk(ValDir):
     for file in files:
         if '.jpg'==file[-4:]:
             out_file.write('%s/%s\n'%(root,file))
-out_file.close()
-TestDir = 'data/test'
- 
-out_file = open('data/test_image_path.txt','w')
-i =1
-for root,dirs,files in os.walk(TestDir):
-    for file in files:
-        if '.jpg'==file[-4:]:
+            out_file.close()
+    TestDir = 'data/test'
+    out_file = open('data/test_image_path.txt','w')
+    i =1
+    for root,dirs,files in os.walk(TestDir):
+        for file in files:
+           if '.jpg'==file[-4:]:
             out_file.write('%s/%s\n'%(root,str(i)+'.jpg'))
             i=i+1
-out_file.close()
-＃xml轉成txt檔
-import xml.etree.ElementTree as ET
-import pickle
-import os
-from os import listdir, getcwd
-from os.path import join
+    out_file.close()
+## xml轉成txt檔
+    import xml.etree.ElementTree as ET
+    import pickle
+    import os
+    from os import listdir, getcwd
+    from os.path import join
+    import shutil, random
 
-import shutil, random
-
-def XMLtoTXT(train_xml_label_Dir):
-    for rootDir,dirs,files in os.walk(train_xml_label_Dir+'0'):  
+    def XMLtoTXT(train_xml_label_Dir):
+        for rootDir,dirs,files in os.walk(train_xml_label_Dir+'0'):  
+            for file in files:  
+            file_name = file.split('.')[0]  
+            out_file = open(train_txt_label_Dir+'%s.txt'%(file_name),'w')  
+            in_file = open("%s/%s.xml"%('data/train',file_name))  
+            tree = ET.parse(in_file)  
+            root = tree.getroot()  
+            size = root.find('size')  
+            w = int(size.find('width').text)  
+            h = int(size.find('height').text)  
+             
+            for obj in root.iter('object'):  
+                xmlbox = obj.find('bndbox')  
+                b = (float(xmlbox.find('xmin').text), float(xmlbox.find('xmax').text), float(xmlbox.find('ymin').text), 
+                float(xmlbox.find('ymax').text))  
+                bb = convert((w,h), b)  
+                out_file.write("0" + " " + " ".join([str(a) for a in bb]) + '\n')      #only one class,index 0
+            out_file.close()
+         
+        for rootDir,dirs,files in os.walk(train_xml_label_Dir+'1'):  
         for file in files:  
             file_name = file.split('.')[0]  
             out_file = open(train_txt_label_Dir+'%s.txt'%(file_name),'w')  
@@ -61,32 +74,16 @@ def XMLtoTXT(train_xml_label_Dir):
             
             for obj in root.iter('object'):  
                 xmlbox = obj.find('bndbox')  
-                b = (float(xmlbox.find('xmin').text), float(xmlbox.find('xmax').text), float(xmlbox.find('ymin').text), float(xmlbox.find('ymax').text))  
-                bb = convert((w,h), b)  
-                out_file.write("0" + " " + " ".join([str(a) for a in bb]) + '\n')      #only one class,index 0
-            out_file.close()
-    for rootDir,dirs,files in os.walk(train_xml_label_Dir+'1'):  
-        for file in files:  
-            file_name = file.split('.')[0]  
-            out_file = open(train_txt_label_Dir+'%s.txt'%(file_name),'w')  
-            in_file = open("%s/%s.xml"%('data/train',file_name))  
-            tree = ET.parse(in_file)  
-            root = tree.getroot()  
-            size = root.find('size')  
-            w = int(size.find('width').text)  
-            h = int(size.find('height').text)  
-            
-            for obj in root.iter('object'):  
-                xmlbox = obj.find('bndbox')  
-                b = (float(xmlbox.find('xmin').text), float(xmlbox.find('xmax').text), float(xmlbox.find('ymin').text), float(xmlbox.find('ymax').text))  
+                b = (float(xmlbox.find('xmin').text), float(xmlbox.find('xmax').text), float(xmlbox.find('ymin').text),      
+                float(xmlbox.find('ymax').text))  
                 bb = convert((w,h), b)  
                 out_file.write("0" + " " + " ".join([str(a) for a in bb]) + '\n')      #only one class,index 0
             out_file.close()
 
-xmlDir = 'data/xml/'
+    xmlDir = 'data/xml/'
 
 
-def convert(size, box):        #归一化操作
+    def convert(size, box):      
     dw = 1./size[0]  
     dh = 1./size[1]  
     x = (box[0] + box[1])/2.0  
@@ -99,15 +96,15 @@ def convert(size, box):        #归一化操作
     h = h*dh  
     return (x,y,w,h)  
 
-if not os.path.exists(xmlDir):   
+    if not os.path.exists(xmlDir):   
     os.makedirs(xmlDir)
 
-if not os.path.exists(train_txt_label_Dir):   
+    if not os.path.exists(train_txt_label_Dir):   
     os.makedirs(train_txt_label_Dir)  
-if not os.path.exists(val_txt_label_Dir):   
+    if not os.path.exists(val_txt_label_Dir):   
     os.makedirs(val_txt_label_Dir)  
 
-XMLtoTXT(xml_Dir)
+    XMLtoTXT(xml_Dir)
 
 ## use yolo-v2
 First, use python transforming your xml file into txt files which are used in yolo-v2, and dividing file into train and validation. 
