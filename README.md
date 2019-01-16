@@ -305,4 +305,12 @@
     p_test = model.predict_classes(extend_channel(chars2))
     print(' '.join([ys[p_test[i]] for i in range(len(p_test))]))
 ![image](https://github.com/107368009jungchengtsai/plate-Recognition/blob/master/13.PNG)
-    
+
+## 14.kaggle排名
+![image]()
+## 15.分析
+    這一次車牌定位使用yolo_v2定位，大部分框有標出來，但在字符分析就有問題，我是用車牌切割的方式辨別，但效果極差，大部分車牌用二分法與灰值，會留下白
+    邊在兩次，而切割方式是使用黑色像速與白色像素多寡來切割，但雜訊太多，大多數切割都不好，但只要切割成功大部分都能正確辨認出來。
+## 16.改進 
+    車牌字符辨任的方式，可以考慮研究驗證碼辨認方式，因為車牌的歪斜也會導致字符的歪斜，就像是驗證碼一樣，因為字符辨任的model所以使用的data並不是現實
+    的車牌，而是使用手寫的數字和字母train的，以後可以能要直接使用車牌來做為訓練方式，想必能提升辨認的準確度。    
