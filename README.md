@@ -222,13 +222,13 @@ image yolo_test.png
         
         return img2
         img2 = img
-  ## 7.X軸切割
+## 7.X軸切割
         chars = split_x(img2)
   ![image](https://github.com/107368009jungchengtsai/plate-Recognition/blob/master/x.PNG)
-  ## 8.Y軸切割
+## 8.Y軸切割
         chars2 = np.array([split_y(c) for c in chars])
   ![image](https://github.com/107368009jungchengtsai/plate-Recognition/blob/master/y.png)
-  ## 9.字符model
+## 9.字符model
         DATASET_DIR = 'dataset/carplate'
     classes = os.listdir(DATASET_DIR + "/ann/")
 
@@ -251,12 +251,42 @@ image yolo_test.png
     model.add(Dense(128, activation='relu'))
     model.add(Dropout(0.5))
     model.add(Dense(num_classes, activation='softmax'))
-
+    model.summary()
     model.compile(loss=keras.losses.categorical_crossentropy,
               optimizer=keras.optimizers.Adadelta(),
               metrics=['accuracy'])
+## 10.查看model
+![image](https://github.com/107368009jungchengtsai/plate-Recognition/blob/master/model.PNG)
+
+          history=model.fit(x_train, y_train2,
+          batch_size=batch_size,
+          epochs=epochs,
+          verbose=1,
+          validation_data=(x_test, y_test2))
+## 11.process
+![image](https://github.com/107368009jungchengtsai/plate-Recognition/blob/master/process.PNG)
+## 12.看val_acc,acc和val_loss,loss圖表
+
+    import matplotlib.pyplot as plt
+    plt.plot(history.history['val_acc'])
+    plt.plot(history.history['acc'])
+    plt.title('model accuracy')
+    plt.ylabel('accuracy')
+    plt.xlabel('epoch')
+    plt.legend(['train', 'test'], loc='upper left')
+    plt.show()
+
+    plt.plot(history.history['val_loss'])
+    plt.plot(history.history['loss'])
+    plt.title('model loss')
+    plt.ylabel('loss')
+    plt.xlabel('epoch')
+    plt.legend(['train', 'test'], loc='upper left')
+    plt.show()
+![image](https://github.com/107368009jungchengtsai/plate-Recognition/blob/master/loss.PNG)
+
     model.load_weights("char_cnn.h5")
- ## 10.切割車牌字符辨任
+## 13.切割車牌字符辨任
     def extend_channel(data):
     if K.image_data_format() == 'channels_first':
         data = data.reshape(data.shape[0], 1, img_rows, img_cols)
