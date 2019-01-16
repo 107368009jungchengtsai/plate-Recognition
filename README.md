@@ -29,22 +29,22 @@
 ## 2.讀取圖像並做顏色反轉
     image = Image.open('image/42.jpg')
     inverted_image = PIL.ImageOps.invert(image)
-![image]()
+
 ## 3.圖像做顏色空間轉換
     imgl = cv2.cvtColor(np.asarray(image), cv2.COLOR_BGR2RGB) 
     #imgl = cv2.cvtColor(imgl, cv2.IMREAD_GRAYSCALE)
     result = cv2.medianBlur(imgl, 3)
     plt.imshow(result);plt.title('Original')
-![image]()
+![image](https://github.com/107368009jungchengtsai/plate-Recognition/blob/master/1.PNG)
 ## 4.圖像做二值化
     gray_image = cv2.cvtColor(result, cv2.COLOR_RGB2GRAY)
     img = cv2.adaptiveThreshold(gray_image, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 91, 0)
     plt.imshow(img),plt.title('Mask')
-![image]()
+![image](https://github.com/107368009jungchengtsai/plate-Recognition/blob/master/2.PNG)
 ## 5.圖像轉換成灰值
     image_grey = color.rgb2gray(img)
     img = image_grey
-![image]()
+![image](https://github.com/107368009jungchengtsai/plate-Recognition/blob/master/4.PNG)
 ## 6.分割車牌方式
     def split_x(img):
     io.imshow(img)
@@ -106,10 +106,10 @@
         img2 = img
   ## 7.X軸切割
         chars = split_x(img2)
-  ![image]()
+  ![image](https://github.com/107368009jungchengtsai/plate-Recognition/blob/master/x.PNG)
   ## 8.Y軸切割
         chars2 = np.array([split_y(c) for c in chars])
-  ![image]()
+  ![image](https://github.com/107368009jungchengtsai/plate-Recognition/blob/master/y.png)
   ## 9.字符model
         DATASET_DIR = 'dataset/carplate'
     classes = os.listdir(DATASET_DIR + "/ann/")
@@ -152,5 +152,5 @@
 
     p_test = model.predict_classes(extend_channel(chars2))
     print(' '.join([ys[p_test[i]] for i in range(len(p_test))]))
-![image]()
+![image](https://github.com/107368009jungchengtsai/plate-Recognition/blob/master/13.PNG)
     
